@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { WishlistProduct } from "../types";
 
 export const getWishlistService = async () => {
     const session = await auth();
@@ -11,6 +12,9 @@ export const getWishlistService = async () => {
             userId: session.user.id,
         },
     });
-    const total = products.reduce((acc: number, p: Product) => acc + p.price, 0);
+    const total = products.reduce(
+        (acc: number, p: WishlistProduct) => acc + p.price,
+        0,
+    );
     return { products, total };
 };

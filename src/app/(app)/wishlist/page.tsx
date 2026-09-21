@@ -1,17 +1,17 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { MOCK_WISHLIST } from "@/features/wishlist/mock-data";
 import { WishlistGrid } from "@/features/wishlist/components/wishlist-grid";
 import { formatPrice } from "@/features/wishlist/types";
 import { cn } from "@/lib/utils";
+import { getWishlistService } from "@/features/wishlist/services/wishlist.services";
 
-export default function WishlistPage() {
+export default async function WishlistPage() {
   // TODO: reemplaza MOCK_WISHLIST por datos reales del usuario.
   // Sugerencia: `const products = await getWishlistProducts(userId)` + filtros por prioridad.
-  const products = MOCK_WISHLIST;
-  const total = products.reduce((acc, p) => acc + p.price, 0);
 
+  const { products, total } = await getWishlistService();
+  
   return (
     <div className="space-y-6">
       {/* Encabezado: acción principal arriba en desktop, FAB abajo en móvil */}
