@@ -20,6 +20,8 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  // Relaciones
+  expenses Expense[]
 }
 
 model Account {
@@ -56,4 +58,25 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Aplicacion
+
+// Producto o servicio
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Product{
+  id String @id @default(cuid())
+  name String
+  description String?
+  price Float
+  priority Priority?
+  link String?
+  // Relation with User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
