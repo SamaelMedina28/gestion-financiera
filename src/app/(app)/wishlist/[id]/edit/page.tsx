@@ -12,17 +12,28 @@ import {
 import { MOCK_WISHLIST } from "@/features/wishlist/mock-data";
 import { WishlistForm } from "@/features/wishlist/components/wishlist-form";
 import { cn } from "@/lib/utils";
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
 
 interface EditPageProps {
   params: Promise<{ id: string }>;
 }
 
+const getProductById = async (id: string) => {
+  const session = await auth();
+  const product = await db.product.findUnique({
+    where: {
+      id,
+      userId: session?.user?.id,
+    },
+  });
+  return product;
+}
+
 export default async function WishlistEditPage({ params }: EditPageProps) {
   const { id } = await params;
+  const product = await getProductById(id);
 
-  // TODO: reemplaza por fetch real: `await getProductById(id, userId)`.
-  // Si no existe o no es del usuario -> notFound() o redirect.
-  const product = MOCK_WISHLIST.find((p) => p.id === id);
   if (!product) notFound();
 
   return (

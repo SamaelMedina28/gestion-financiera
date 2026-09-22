@@ -17,6 +17,9 @@ import {
   type WishlistProduct,
 } from "@/features/wishlist/types";
 import { cn } from "@/lib/utils";
+import { useActionState, useEffect } from "react";
+import { createWishListItem, State } from "../actions/createWishListItem";
+import { useRouter } from "next/navigation";
 
 interface WishlistFormProps {
   mode: "create" | "edit";
@@ -29,16 +32,21 @@ interface WishlistFormProps {
 // name, description?, price, priority?, link?
 export function WishlistForm({ mode, defaultValues }: WishlistFormProps) {
   const isEdit = mode === "edit";
+  const router = useRouter();
+  const   [state, formAction] = useActionState<State, FormData>(createWishListItem, {
+    success: false,
+  });
+
+  useEffect(() => {
+    if (state.success) {
+      router.push("/wishlist");
+    }
+  }, [state.success, router]);
 
   return (
     <form
       className="space-y-5"
-      onSubmit={(e) => {
-        e.preventDefault();
-        // TODO: implementa create/update real.
-        // Sugerencia: server action con zod:
-        // name (min 2), price (> 0), link (url opcional), priority opcional.
-      }}
+      action={formAction}
     >
       {/* Nombre */}
       <div className="space-y-2">

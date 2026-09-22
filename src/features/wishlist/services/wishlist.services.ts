@@ -21,6 +21,7 @@ export const getWishlistService = async () => {
 
 export const addWishlistService = async (data: { name: string, description: string | undefined, price: number, priority: Priority | undefined, link: string | undefined }) => {
     const session = await auth();
+    console.log("session:", session);
     if (!session?.user?.id) {
         throw new Error("No se pudo obtener la sesión");
     }

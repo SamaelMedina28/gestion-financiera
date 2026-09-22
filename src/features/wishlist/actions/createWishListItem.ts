@@ -5,7 +5,7 @@ import { addWishlistService } from "../services/wishlist.services";
 import { Priority } from "../types";
 import { productSchema } from "../wishlist.schema";
 
-interface State {
+export interface State {
     success?: boolean;
     error?: string;
     fieldErrors?: Partial<
@@ -27,12 +27,13 @@ export const createWishListItem = async (
     try {
         const validation = productSchema.safeParse({
             name: formData.get("name"),
-            description: formData.get("description"),
+            description: formData.get("description") || undefined,
             price: formData.get("price"),
-            priority: formData.get("priority"),
-            link: formData.get("link"),
+            priority: formData.get("priority") || undefined,
+            link: formData.get("link") || undefined,
         });
 
+        console.log("validation:", validation.error?.issues);
         if (!validation.success) {
             return {
                 success: false,
